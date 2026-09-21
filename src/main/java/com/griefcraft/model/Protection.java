@@ -44,8 +44,8 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -163,7 +163,7 @@ public class Protection {
     /**
      * JSON data for the protection
      */
-    private final JSONObject data = new JSONObject();
+    private final JsonObject data = new JsonObject();
 
     /**
      * Unique id (in sql)
@@ -344,10 +344,9 @@ public class Protection {
     /**
      * Encode the AccessRights to JSON
      */
-    @SuppressWarnings("unchecked")
     public void encodeRights() {
         // create the root
-        JSONArray root = new JSONArray();
+        JsonArray root = new JsonArray();
 
         // add all of the permissions to the root
         for (Permission permission : permissions) {
@@ -356,15 +355,14 @@ public class Protection {
             }
         }
 
-        data.put("rights", root);
+        data.add("rights", root);
     }
 
     /**
      * Encode the protection flags to JSON
      */
-    @SuppressWarnings("unchecked")
     public void encodeFlags() {
-        JSONArray root = new JSONArray();
+        JsonArray root = new JsonArray();
 
         for (Flag flag : flags.values()) {
             if (flag != null) {
@@ -372,7 +370,7 @@ public class Protection {
             }
         }
 
-        data.put("flags", root);
+        data.add("flags", root);
     }
 
     /**
@@ -639,7 +637,7 @@ public class Protection {
         }
     }
 
-    public JSONObject getData() {
+    public JsonObject getData() {
         return data;
     }
 

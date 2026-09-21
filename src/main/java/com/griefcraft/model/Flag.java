@@ -29,7 +29,7 @@
 package com.griefcraft.model;
 
 import com.griefcraft.util.StringUtil;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class Flag {
 
@@ -115,12 +115,11 @@ public class Flag {
     /**
      * Flag data
      */
-    private final JSONObject data = new JSONObject();
+    private final JsonObject data = new JsonObject();
 
-    @SuppressWarnings("unchecked")
     public Flag(Type type) {
         this.type = type;
-        data.put("id", type.ordinal());
+        data.addProperty("id", type.ordinal());
     }
 
     /**
@@ -129,8 +128,7 @@ public class Flag {
      * @param node
      * @return
      */
-    @SuppressWarnings("unchecked")
-    public static Flag decodeJSON(JSONObject node) {
+    public static Flag decodeJSON(JsonObject node) {
         if (node == null) {
             return null;
         }
@@ -139,8 +137,8 @@ public class Flag {
         int ordinal = -1;
 
         try {
-            ordinal = Integer.parseInt(node.get("id").toString());
-        } catch (NumberFormatException e) {
+            ordinal = node.get("id").getAsInt();
+        } catch (RuntimeException e) {
             return null;
         }
 
@@ -152,7 +150,7 @@ public class Flag {
         // let's do a range check
         Type[] values = Type.values();
 
-        if (ordinal > values.length) {
+        if (ordinal >= values.length) {
             return null;
         }
 
@@ -161,7 +159,7 @@ public class Flag {
 
         // create the Flag and hand over the data we have
         Flag flag = new Flag(type);
-        flag.getData().putAll(node);
+        node.entrySet().forEach(entry -> flag.getData().add(entry.getKey(), entry.getValue()));
 
         return flag;
     }
@@ -181,7 +179,7 @@ public class Flag {
     /**
      * @return
      */
-    public JSONObject getData() {
+    public JsonObject getData() {
         return data;
     }
 

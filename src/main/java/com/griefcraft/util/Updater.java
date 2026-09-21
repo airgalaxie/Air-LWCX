@@ -29,11 +29,12 @@
 package com.griefcraft.util;
 
 import com.griefcraft.lwc.LWC;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonParser;
 
-import java.net.URL;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
 
 public class Updater {
 
@@ -54,22 +55,19 @@ public class Updater {
         }
     }
 
-    final static String VERSION_URL = "http://api.spiget.org/v2/resources/69551/versions?size=" + Integer.MAX_VALUE
+    final static String VERSION_URL = "https://api.spiget.org/v2/resources/69551/versions?size=" + Integer.MAX_VALUE
             + "&spiget__ua=SpigetDocs";
-    final static String DESCRIPTION_URL = "http://api.spiget.org/v2/resources/69551/updates?size=" + Integer.MAX_VALUE
+    final static String DESCRIPTION_URL = "https://api.spiget.org/v2/resources/69551/updates?size=" + Integer.MAX_VALUE
             + "&spiget__ua=SpigetDocs";
 
     public static Object[] getLastUpdate() {
         try {
-            JSONArray versionsArray = (JSONArray) JSONValue
-                    .parseWithException((new URL(String.valueOf(VERSION_URL))).toString());
-            Double lastVersion = Double
-                    .parseDouble(((JSONObject) versionsArray.get(versionsArray.size() - 1)).get("name").toString());
+            JsonArray versionsArray = readArray(VERSION_URL);
+            String lastVersion = versionsArray.get(versionsArray.size() - 1).getAsJsonObject().get("name").getAsString();
 
-            if (lastVersion > Double.parseDouble(LWC.getInstance().getPlugin().getDescription().getVersion())) {
-                JSONArray updatesArray = (JSONArray) JSONValue
-                        .parseWithException((new URL(String.valueOf(DESCRIPTION_URL))).toString());
-                String updateName = ((JSONObject) updatesArray.get(updatesArray.size() - 1)).get("title").toString();
+            if (compareVersions(lastVersion, LWC.getInstance().getPlugin().getDescription().getVersion()) > 0) {
+                JsonArray updatesArray = readArray(DESCRIPTION_URL);
+                String updateName = updatesArray.get(updatesArray.size() - 1).getAsJsonObject().get("title").getAsString();
 
                 Object[] update = {lastVersion, updateName};
                 return update;
@@ -79,5 +77,31 @@ public class Updater {
         }
 
         return new String[0];
+    }
+
+    private static JsonArray readArray(String url) throws Exception {
+        try (InputStreamReader reader = new InputStreamReader(
+                URI.create(url).toURL().openStream(), StandardCharsets.UTF_8)) {
+            return JsonParser.parseReader(reader).getAsJsonArray();
+        }
+    }
+
+    private static int compareVersions(String left, String right) {
+        String[] leftParts = left.split("[.-]");
+        String[] rightParts = right.split("[.-]");
+        int length = Math.max(leftParts.length, rightParts.length);
+        for (int i = 0; i < length; i++) {
+            int leftPart = i < leftParts.length ? parseVersionPart(leftParts[i]) : 0;
+            int rightPart = i < rightParts.length ? parseVersionPart(rightParts[i]) : 0;
+            if (leftPart != rightPart) {
+                return Integer.compare(leftPart, rightPart);
+            }
+        }
+        return 0;
+    }
+
+    private static int parseVersionPart(String part) {
+        String digits = part.replaceFirst("^(\\d+).*$", "$1");
+        return digits.matches("\\d+") ? Integer.parseInt(digits) : 0;
     }
 }

@@ -1,14 +1,15 @@
 import java.util.*
+import org.gradle.api.tasks.bundling.AbstractArchiveTask
 
 plugins {
     id("java-library")
     id("maven-publish")
-    id("io.github.goooler.shadow") version "8.1.7"
+    alias(libs.plugins.shadow)
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
     withSourcesJar()
 }
@@ -25,29 +26,32 @@ repositories {
 }
 
 dependencies {
-    compileOnly(group = "io.papermc.paper", name = "paper-api", version = "1.21.11-R0.1-SNAPSHOT")
-    compileOnly(group = "com.sk89q.worldedit", name = "worldedit-core", version = "7.1.0") {
+    compileOnly(libs.paper.api)
+    compileOnly(libs.worldedit.core) {
         isTransitive = false
     }
-    compileOnly(group = "com.sk89q.worldedit", name = "worldedit-bukkit", version = "7.1.0")  {
+    compileOnly(libs.worldedit.bukkit) {
         isTransitive = false
     }
-    compileOnly(group = "com.sk89q.worldguard", name = "worldguard-core", version = "7.0.0") {
+    compileOnly(libs.worldguard.core) {
         isTransitive = false
     }
-    compileOnly(group = "com.sk89q.worldguard", name = "worldguard-bukkit", version = "7.0.0") {
+    compileOnly(libs.worldguard.bukkit) {
         isTransitive = false
     }
-    compileOnly(group = "com.palmergames.bukkit.towny", name = "towny", version = "0.98.2.0")
-    compileOnly(group = "com.massivecraft", name = "Factions", version = "1.6.9.5-U0.4.9")
-    compileOnly(group = "com.github.MilkBowl", name = "VaultAPI", version = "1.7.1")
-    compileOnly(group = "org.apache.commons", name = "commons-lang3", version = "3.19.0")
-    compileOnly(group = "com.googlecode.json-simple", name = "json-simple", version = "1.1.1")
-    compileOnly(group = "com.google.guava", name = "guava", version = "33.3.1-jre")
-    implementation(group = "org.bstats", name = "bstats-bukkit", version = "3.0.2")
+    compileOnly(libs.towny)
+    compileOnly(libs.factions)
+    compileOnly(libs.vault.api)
+    compileOnly(libs.commons.lang3)
+    implementation(libs.gson)
+    compileOnly(libs.guava)
+    implementation(libs.bstats.bukkit)
 }
 
 tasks {
+    withType<AbstractArchiveTask> {
+        destinationDirectory.set(layout.projectDirectory.dir("target"))
+    }
     withType<JavaCompile> {
         options.encoding = "UTF-8"
     }
@@ -65,6 +69,7 @@ tasks {
         archiveClassifier.set("")
         archiveFileName.set("${rootProject.name.uppercase(Locale.getDefault())}-${project.version}.jar")
         relocate("org.bstats", "${project.group}.${rootProject.name}.lib.bstats")
+        relocate("com.google.gson", "${project.group}.${rootProject.name}.lib.gson")
         manifest {
             attributes("paperweight-mappings-namespace" to "mojang")
         }

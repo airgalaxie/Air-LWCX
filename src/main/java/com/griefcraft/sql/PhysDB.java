@@ -48,9 +48,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,11 +67,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PhysDB extends Database {
-
-    /**
-     * The JSON Parser object
-     */
-    private final JSONParser jsonParser = new JSONParser();
 
     /**
      * The database version
@@ -756,35 +752,35 @@ public class PhysDB extends Database {
             }
 
             // rev up them JSON parsers!
-            Object object = null;
+            JsonElement object;
 
             try {
-                object = jsonParser.parse(data);
+                object = JsonParser.parseString(data);
             } catch (Exception | Error e) {
                 return protection;
             }
 
-            if (!(object instanceof JSONObject)) {
+            if (!object.isJsonObject()) {
                 return protection;
             }
 
             // obtain the root
-            JSONObject root = (JSONObject) object;
-            protection.getData().putAll(root);
+            JsonObject root = object.getAsJsonObject();
+            root.entrySet().forEach(entry -> protection.getData().add(entry.getKey(), entry.getValue()));
 
             // Attempt to parse rights
-            Object rights = root.get("rights");
+            JsonElement rights = root.get("rights");
 
-            if (rights != null && (rights instanceof JSONArray)) {
-                JSONArray array = (JSONArray) rights;
+            if (rights != null && rights.isJsonArray()) {
+                JsonArray array = rights.getAsJsonArray();
 
-                for (Object node : array) {
+                for (JsonElement node : array) {
                     // we only want to use the maps
-                    if (!(node instanceof JSONObject)) {
+                    if (!node.isJsonObject()) {
                         continue;
                     }
 
-                    JSONObject map = (JSONObject) node;
+                    JsonObject map = node.getAsJsonObject();
 
                     // decode the map
                     Permission permission = Permission.decodeJSON(map);
@@ -797,16 +793,16 @@ public class PhysDB extends Database {
             }
 
             // Attempt to parse flags
-            Object flags = root.get("flags");
-            if (flags != null && (rights instanceof JSONArray)) {
-                JSONArray array = (JSONArray) flags;
+            JsonElement flags = root.get("flags");
+            if (flags != null && flags.isJsonArray()) {
+                JsonArray array = flags.getAsJsonArray();
 
-                for (Object node : array) {
-                    if (!(node instanceof JSONObject)) {
+                for (JsonElement node : array) {
+                    if (!node.isJsonObject()) {
                         continue;
                     }
 
-                    JSONObject map = (JSONObject) node;
+                    JsonObject map = node.getAsJsonObject();
 
                     Flag flag = Flag.decodeJSON(map);
 
@@ -1814,7 +1810,7 @@ public class PhysDB extends Database {
             statement.setInt(2, protection.getType().ordinal());
             statement.setInt(3, protection.getBlockId());
             statement.setString(4, protection.getWorld());
-            statement.setString(5, protection.getData().toJSONString());
+            statement.setString(5, protection.getData().toString());
             statement.setString(6, protection.getOwner());
             statement.setString(7, protection.getPassword());
             statement.setInt(8, protection.getX());

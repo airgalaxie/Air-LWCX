@@ -6,12 +6,13 @@
 package com.griefcraft.util;
 
 import com.google.common.collect.ImmutableList;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,6 @@ import java.util.concurrent.Callable;
 
 public class NameFetcher implements Callable<Map<UUID, String>> {
     private static final String PROFILE_URL = "https://sessionserver.mojang.com/session/minecraft/profile/";
-    private final JSONParser jsonParser = new JSONParser();
     private final List<UUID> uuids;
 
     public NameFetcher(List<UUID> uuids) {
@@ -32,18 +32,25 @@ public class NameFetcher implements Callable<Map<UUID, String>> {
         for (UUID uuid : uuids) {
             HttpURLConnection connection = (HttpURLConnection) new URL(PROFILE_URL + uuid.toString().replace("-", "")).openConnection();
             connection.setConnectTimeout(10000);
-            JSONObject response = (JSONObject) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
-            String name = (String) response.get("name");
+            JsonObject response;
+            try (InputStreamReader reader = new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8)) {
+                response = JsonParser.parseReader(reader).getAsJsonObject();
+            }
+            String cause = getString(response, "cause");
+            String errorMessage = getString(response, "errorMessage");
+            if (cause != null && !cause.isEmpty()) {
+                throw new IllegalStateException(errorMessage);
+            }
+            String name = getString(response, "name");
             if (name == null) {
                 continue;
-            }
-            String cause = (String) response.get("cause");
-            String errorMessage = (String) response.get("errorMessage");
-            if (cause != null && cause.length() > 0) {
-                throw new IllegalStateException(errorMessage);
             }
             uuidStringMap.put(uuid, name);
         }
         return uuidStringMap;
+    }
+
+    private static String getString(JsonObject object, String key) {
+        return object.has(key) && !object.get(key).isJsonNull() ? object.get(key).getAsString() : null;
     }
 }

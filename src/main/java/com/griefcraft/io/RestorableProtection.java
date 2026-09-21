@@ -124,7 +124,7 @@ public class RestorableProtection implements Restorable {
             rprotection.x = protection.getX();
             rprotection.y = protection.getY();
             rprotection.z = protection.getZ();
-            rprotection.data = protection.getData().toJSONString();
+            rprotection.data = protection.getData().toString();
             rprotection.created = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse(protection.getCreation()).getTime() / 1000;
             rprotection.updated = protection.getLastAccessed();
 

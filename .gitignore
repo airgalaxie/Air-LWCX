@@ -234,6 +234,7 @@ Temporary Items
 **/nbproject/Makefile-*.mk
 **/nbproject/Package-*.bash
 build/
+target/
 nbbuild/
 dist/
 nbdist/

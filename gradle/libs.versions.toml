@@ -1,0 +1,29 @@
+[versions]
+shadow = "9.6.1"
+paper = "26.3.build.+"
+worldedit = "7.4.0"
+worldguard = "7.0.0"
+towny = "0.98.2.0"
+factions = "1.6.9.5-U0.4.9"
+vault = "1.7.1"
+commons-lang3 = "3.19.0"
+gson = "2.14.0"
+guava = "33.3.1-jre"
+bstats = "3.0.2"
+
+[libraries]
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }
+worldedit-core = { module = "com.sk89q.worldedit:worldedit-core", version.ref = "worldedit" }
+worldedit-bukkit = { module = "com.sk89q.worldedit:worldedit-bukkit", version.ref = "worldedit" }
+worldguard-core = { module = "com.sk89q.worldguard:worldguard-core", version.ref = "worldguard" }
+worldguard-bukkit = { module = "com.sk89q.worldguard:worldguard-bukkit", version.ref = "worldguard" }
+towny = { module = "com.palmergames.bukkit.towny:towny", version.ref = "towny" }
+factions = { module = "com.massivecraft:Factions", version.ref = "factions" }
+vault-api = { module = "com.github.MilkBowl:VaultAPI", version.ref = "vault" }
+commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commons-lang3" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+bstats-bukkit = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
+
+[plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }

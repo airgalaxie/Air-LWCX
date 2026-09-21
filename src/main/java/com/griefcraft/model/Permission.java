@@ -31,7 +31,7 @@ package com.griefcraft.model;
 import com.griefcraft.util.Colors;
 import com.griefcraft.util.StringUtil;
 import com.griefcraft.util.UUIDRegistry;
-import org.json.simple.JSONObject;
+import com.google.gson.JsonObject;
 
 public class Permission {
 
@@ -146,38 +146,37 @@ public class Permission {
     }
 
     /**
-     * Encode the Permission object to a JSONObject
+     * Encode the Permission object to a JSON object
      *
      * @return
      */
-    @SuppressWarnings("unchecked")
-    public JSONObject encodeToJSON() {
-        JSONObject object = new JSONObject();
+    public JsonObject encodeToJSON() {
+        JsonObject object = new JsonObject();
 
-        object.put("name", name);
-        object.put("type", getType().ordinal());
-        object.put("rights", getAccess().ordinal());
+        object.addProperty("name", name);
+        object.addProperty("type", getType().ordinal());
+        object.addProperty("rights", getAccess().ordinal());
 
         return object;
     }
 
     /**
-     * Decode a JSONObject into a Permission object
+     * Decode a JSON object into a Permission object
      *
      * @param node
      * @return
      */
-    public static Permission decodeJSON(JSONObject node) {
+    public static Permission decodeJSON(JsonObject node) {
         Permission permission = new Permission();
 
-        Access access = Access.values()[((Long) node.get("rights")).intValue()];
+        Access access = Access.values()[node.get("rights").getAsInt()];
         if (access.ordinal() == 0) {
             access = Access.PLAYER;
         }
 
         // The values are stored as longs internally, despite us passing an int
-        permission.setName((String) node.get("name"));
-        permission.setType(Type.values()[((Long) node.get("type")).intValue()]);
+        permission.setName(node.get("name").getAsString());
+        permission.setType(Type.values()[node.get("type").getAsInt()]);
         permission.setAccess(access);
 
         return permission;

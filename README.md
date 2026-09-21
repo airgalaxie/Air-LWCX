@@ -1,21 +1,45 @@
-# LWC Extended
+# Air-LWCX
 
-The unofficial continuation of LWC, supporting newer versions of Minecraft. You can download stable releases of the plugin from the [Spigot resource page](https://www.spigotmc.org/resources/lwc-extended.69551/) or development versions from our [build server](https://ci.codemc.io/view/Author/job/pop4959/job/LWC/).
+An updated version of the LWC block protection plugin for Paper, based on
+[pop4959/LWCX](https://github.com/pop4959/LWCX) (licensed under a modified BSD-2-Clause,
+Copyright 2011 Tyler Blair).
+
+LWC protects both the blocks themselves and their contents. Originally designed in 2010 for
+locking chests (hence the name "Lightweight Chests"), it can be configured to lock any block,
+including doors, signs, trapdoors, shelves and supported entities.
+
+### Differences from upstream
+
+Air-LWCX tracks the `paper` branch of pop4959/LWCX and adds support for newer Minecraft
+versions, including the Poplar (26.3) block set. Changes are kept local to this repository.
 
 ### Contributors
-  * Hidendra - Original LWC author
-  * pop4959 - Current LWCX maintainer
-  * Me_Goes_Rawr - Previous maintainer
-  * [Contributors to LWC](https://github.com/Hidendra/LWC/graphs/contributors)
-  * [Contributors to LWCX](https://github.com/pop4959/LWCX/graphs/contributors)
+
+* Hidendra - Original LWC author
+* pop4959 - LWCX maintainer
+* Me_Goes_Rawr - Previous maintainer
+* airgalaxie - Air-LWCX fork
+* [Contributors to LWC](https://github.com/Hidendra/LWC/graphs/contributors)
+* [Contributors to LWCX](https://github.com/pop4959/LWCX/graphs/contributors)
 
 ### Support
-For reporting problems with the plugin, please make an issue here on GitHub. For anything else, feel free to join us on the [M.O.S.S. Discord server](https://discord.gg/PHpuzZS). Before asking for support, please make sure you have an updated version of the plugin first.
-  
-### Information
-LWC is the longest-lived single block protection plugin, that protects both the blocks themselves and their contents. Originally designed in 2010 for locking chests (hence the name "Lightweight Chests"), it can be configured to lock any block.
 
-Please see our [wiki](https://github.com/pop4959/LWCX/wiki) for important information about setting up and using the plugin.
+For reporting problems with the plugin, please make an issue here on GitHub. For anything else,
+feel free to join us on the [M.O.S.S. Discord server](https://discord.gg/PHpuzZS). Before asking
+for support, please make sure you have an updated version of the plugin first.
+
+### Building
+
+Air-LWCX targets Paper and uses the included Gradle wrapper:
+
+```shell
+./gradlew build
+```
+
+Generated JAR files are written to `target/`. Dependency, plugin, Java and project versions are
+maintained in `gradle/libs.versions.toml`.
 
 ### Contributing
-Contributing to LWCX is encouraged, and very easy. Fork the repository, and build using maven. Simply make a pull request explaining your changes, and how they are a beneficial addition to the plugin. Github Actions will automatically build all pull requests to ensure that they build with OpenJDK 21.
+
+Fork the repository and submit a pull request explaining the change. GitHub Actions builds each
+pull request with the configured Java toolchain.

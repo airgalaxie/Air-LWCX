@@ -7,9 +7,11 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
+version = libs.versions.lwc.get()
+
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(25))
+        languageVersion.set(JavaLanguageVersion.of(libs.versions.java.get().toInt()))
     }
     withSourcesJar()
 }
@@ -22,6 +24,7 @@ repositories {
     maven("https://repo.glaremasters.me/repository/towny/")
     maven("https://ci.ender.zone/plugin/repository/everything/")
     maven("https://repo.glaremasters.me/repository/public/")
+    maven("https://repo.codemc.io/repository/maven-public/")
     maven("https://jitpack.io")
 }
 
@@ -57,11 +60,15 @@ tasks {
     }
     jar {
         archiveClassifier.set("noshade")
+        from("LICENSE") {
+            into("/")
+        }
     }
     processResources {
         filesMatching("plugin.yml") {
             expand(
                 "version" to project.version,
+                "apiVersion" to libs.versions.paper.plugin.api.get(),
             )
         }
     }
@@ -70,6 +77,9 @@ tasks {
         archiveFileName.set("${rootProject.name.uppercase(Locale.getDefault())}-${project.version}.jar")
         relocate("org.bstats", "${project.group}.${rootProject.name}.lib.bstats")
         relocate("com.google.gson", "${project.group}.${rootProject.name}.lib.gson")
+        from("LICENSE") {
+            into("/")
+        }
         manifest {
             attributes("paperweight-mappings-namespace" to "mojang")
         }

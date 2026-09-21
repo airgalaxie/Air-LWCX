@@ -1,10 +1,10 @@
 name: LWC
 main: com.griefcraft.lwc.LWCPlugin
 version: ${version}
-api-version: "1.20.6"
+api-version: "${apiVersion}"
 author: Hidendra
-authors: [pop4959, Me_Goes_RAWR]
-website: https://www.spigotmc.org/resources/lwc-extended.69551/
+authors: [pop4959, Me_Goes_RAWR, airgalaxie]
+website: https://github.com/airgalaxie/Air-LWCX
 description: >
              Inventory protection & management utilizing SQLite or MySQL as its backend
              Other blocks can also be protected individually, if configured.

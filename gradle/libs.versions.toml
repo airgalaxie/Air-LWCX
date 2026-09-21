@@ -1,15 +1,18 @@
 [versions]
 shadow = "9.6.1"
+java = "25"
+lwc = "2.4.2-Air#2"
+paper-plugin-api = "1.20.6"
 paper = "26.3.build.+"
-worldedit = "7.4.0"
-worldguard = "7.0.0"
-towny = "0.98.2.0"
-factions = "1.6.9.5-U0.4.9"
+worldedit = "7.4.5"
+worldguard = "7.0.19"
+towny = "0.103.2.7"
+factions = "1.6.9.5-U0.6.35"
 vault = "1.7.1"
-commons-lang3 = "3.19.0"
+commons-lang3 = "3.20.0"
 gson = "2.14.0"
-guava = "33.3.1-jre"
-bstats = "3.0.2"
+guava = "33.7.1-jre"
+bstats = "3.2.1"
 
 [libraries]
 paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper" }

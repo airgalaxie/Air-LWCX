@@ -141,6 +141,15 @@ public class DoorMatcher implements ProtectionFinder.Matcher {
                 Optional.ofNullable(Material.getMaterial("PALE_OAK_PRESSURE_PLATE")).ifPresent(PRESSURE_PLATES::add);
             }
         }
+        if (VersionUtil.isAtLeast(26, 3)) {
+            Optional.ofNullable(Material.getMaterial("POPLAR_DOOR")).ifPresent(PROTECTABLES_DOORS::add);
+            Optional.ofNullable(Material.getMaterial("POPLAR_DOOR")).ifPresent(WOODEN_DOORS::add);
+            Optional.ofNullable(Material.getMaterial("POPLAR_FENCE_GATE")).ifPresent(FENCE_GATES::add);
+            Optional.ofNullable(Material.getMaterial("POPLAR_FENCE_GATE")).ifPresent(WOODEN_FENCE_GATES::add);
+            Optional.ofNullable(Material.getMaterial("POPLAR_TRAPDOOR")).ifPresent(TRAP_DOORS::add);
+            Optional.ofNullable(Material.getMaterial("POPLAR_TRAPDOOR")).ifPresent(WOODEN_TRAP_DOORS::add);
+            Optional.ofNullable(Material.getMaterial("POPLAR_PRESSURE_PLATE")).ifPresent(PRESSURE_PLATES::add);
+        }
     }
 
     public boolean matches(ProtectionFinder finder) {

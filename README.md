@@ -24,9 +24,9 @@ versions, including the Poplar (26.3) block set. Changes are kept local to this 
 
 ### Support
 
-For reporting problems with the plugin, please make an issue here on GitHub. For anything else,
-feel free to join us on the [M.O.S.S. Discord server](https://discord.gg/PHpuzZS). Before asking
-for support, please make sure you have an updated version of the plugin first.
+For reporting problems with the plugin, please make an issue here on GitHub. Before asking for
+support, make sure you are running the latest version of the plugin first. Note: this fork is not
+maintained on the upstream LWCX Discord server, so please report issues here on GitHub instead.
 
 ### Building
 

@@ -1,0 +1,61 @@
+name: Bug Report
+description: File a bug report for Air-LWCX
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the fields below. Before
+        reporting, make sure you are running the latest version of Air-LWCX.
+  - type: input
+    id: lwc-version
+    attributes:
+      label: Air-LWCX version
+      description: Output of `/lwc admin version` in-game or the version from the JAR file name.
+      placeholder: e.g. 2.4.2-Air#2
+    validations:
+      required: true
+  - type: input
+    id: server-version
+    attributes:
+      label: Server version
+      description: Output of the `/version` command (server software, build and Minecraft version).
+      placeholder: e.g. Paper 26.3 build 32 (MC: 26.3)
+    validations:
+      required: true
+  - type: input
+    id: material
+    attributes:
+      label: Affected block / material
+      description: The block type involved (e.g. poplar_door, chiseled_bookshelf, brewing_stand).
+      placeholder: e.g. poplar_door
+    validations:
+      required: false
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you expect to happen, and what actually happened instead?
+      placeholder: Tell us what you see.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: How can we reproduce the issue?
+      placeholder: |
+        1. Place a ...
+        2. Run /cprivate ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console / error log
+      description: Paste any relevant console output here. Do not include credentials or tokens.
+      render: shell
+    validations:
+      required: false
